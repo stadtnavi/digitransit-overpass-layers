@@ -56,7 +56,8 @@ there were no found coordinates in the given bounding box) none of the layers wi
 You have to make sure that all the given URLs are valid **and** you shouldn't include an empty layer. 
 
 ## Run
-You can add the bounding box (ENV_BBOX) and the destination directory for the GeoJson files (ENV_DDIR) via environment variables.  
+You can add the bounding box (ENV_BBOX), the icon source dir (ENV_ICONSRC) and the destination directory for the 
+GeoJson files (ENV_DDIR) via environment variables.  
 ```cmd
-$ python ENV_BBOX="<coordinates>" ENV_DDIR="./destDir/" generate-hb-layers.py
+$ python ENV_BBOX="<coordinates>" ENV_ICONSRC="./iconSourceDir/" ENV_DDIR="./destDir/" generate-hb-layers.py
 ``` 

@@ -4,7 +4,7 @@ from geojson_modifier import *
 import os
 
 Herrenberg_bbox = os.getenv('ENV_BBOX', "48.51592209023528,8.533287048339844,48.72607645125842,9.036598205566406")
-svgSourceDir = "./layer-icons/"
+svgSourceDir = os.getenv('ENV_ICONSRC', "./layer-icons/")
 
 geojson_destDir = os.getenv('ENV_DDIR', "../digitransit-ui/static/assets/geojson/hb-layers/")
 details = ["capacity", "opening_hours", "contact:phone", "phone", "wheelchair", "fee", "contact:website", "website"]
