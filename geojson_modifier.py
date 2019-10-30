@@ -68,8 +68,6 @@ def _process_single_way(way_id, w, node_storage, nodes_used_in_ways):
     return way
 
 def _process_relations(resulting_geojson, relation_storage, way_storage, node_storage, nodes_used_in_ways):
-    from osmtogeojson import merge
-
     ways_used_in_relations = {}
     for rel_id in relation_storage:
         r = relation_storage[rel_id]
