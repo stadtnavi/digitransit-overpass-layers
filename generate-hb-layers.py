@@ -1,3 +1,5 @@
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
 from geojson_modifier import *
 import os
 
@@ -49,12 +51,12 @@ try: carCharge.run()
 except IndexError:
     print("No locations found")
 
-carParkOp = GenerateLayer(geojson_destDir, Herrenberg_bbox,   """"""nwr[amenity=parking]["access"!="private"]["access"!="customers"]["parking"="surface"]({{bbox}}); """""", "Parkplatz", "Car parking", "carParkOpIcon", svgSourceDir+"openedcarpark.svg", details, details_de, details_en)
+carParkOp = GenerateLayer(geojson_destDir, Herrenberg_bbox,  """nwr[amenity=parking]["access"!="private"]["access"!="customers"]["parking"="surface"]({{bbox}}); """, "Parkplatz", "Car parking", "carParkOpIcon", svgSourceDir+"openedcarpark.svg", details, details_de, details_en)
 try: carParkOp.run()
 except IndexError:
     print("No locations found")
 
-carParkCov = GenerateLayer(geojson_destDir, Herrenberg_bbox,   """"""nwr[amenity=parking]["access"!="private"]["access"!="customers"]["parking"!="surface"]({{bbox}}); """""", "Parkhaus/Tiefgarage", "Multi-story/underground car parking", "carParkCovIcon", svgSourceDir+"coveredcarpark.svg", details, details_de, details_en)
+carParkCov = GenerateLayer(geojson_destDir, Herrenberg_bbox,   """nwr[amenity=parking]["access"!="private"]["access"!="customers"]["parking"!="surface"]({{bbox}}); """, "Parkhaus/Tiefgarage", "Multi-story/underground car parking", "carParkCovIcon", svgSourceDir+"coveredcarpark.svg", details, details_de, details_en)
 try: carParkCov.run()
 except IndexError:
     print("No locations found")
@@ -64,7 +66,7 @@ try: carShare.run()
 except IndexError:
     print("No locations found")
 
-carPR = GenerateLayer(geojson_destDir, Herrenberg_bbox,  """"""nwr[amenity=parking]["park_ride"="yes"]({{bbox}}); """""", "Park-Und-Ride", "Park and Ride", "carPRIcon", svgSourceDir+"parkandride.svg", details, details_de, details_en)
+carPR = GenerateLayer(geojson_destDir, Herrenberg_bbox,  """nwr[amenity=parking]["park_ride"="yes"]({{bbox}}); """, "Park-Und-Ride", "Park and Ride", "carPRIcon", svgSourceDir+"parkandride.svg", details, details_de, details_en)
 try: carPR.run()
 except IndexError:
     print("No locations found")
