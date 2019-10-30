@@ -5,7 +5,8 @@
 import json
 import re
 import overpass
-from osmtogeojson import osmtogeojson, merge
+from osmtogeojson import osmtogeojson
+from osmtogeojson import merge
 
 #%% [markdown]
 # ### UpdateLayer class' functions
