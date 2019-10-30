@@ -1,9 +1,10 @@
 from geojson_modifier import *
+import os
 
-Herrenberg_bbox = "48.51592209023528,8.533287048339844,48.72607645125842,9.036598205566406"
+Herrenberg_bbox = os.getenv('ENV_BBOX', "48.51592209023528,8.533287048339844,48.72607645125842,9.036598205566406")
 svgSourceDir = "./layer-icons/"
 
-geojson_destDir = "../digitransit-ui/static/assets/geojson/hb-layers/"
+geojson_destDir = os.getenv('ENV_DDIR', "../digitransit-ui/static/assets/geojson/hb-layers/")
 details = ["capacity", "opening_hours", "contact:phone", "phone", "wheelchair", "fee", "contact:website", "website"]
 details_de = ["Kapazität", "Öffnungszeiten", "Telefon", "Telefon", "Barrierefrei", "Gebühr", "Webseite", "Webseite"]
 details_en = ["Capacity", "Opening hours", "Phone", "Phone", "Wheelchair", "Fee", "Website", "Website"]
@@ -48,12 +49,12 @@ try: carCharge.run()
 except IndexError:
     print("No locations found")
 
-carParkOp = GenerateLayer(geojson_destDir, Herrenberg_bbox,  """nwr[amenity=parking]["access"!="private"]["access"!="customers"]["parking"="surface"]({{bbox}});""", "Parkplatz", "Car parking", "carParkOpIcon", svgSourceDir+"openedcarpark.svg", details, details_de, details_en)
+carParkOp = GenerateLayer(geojson_destDir, Herrenberg_bbox,   """"""nwr[amenity=parking]["access"!="private"]["access"!="customers"]["parking"="surface"]({{bbox}}); """""", "Parkplatz", "Car parking", "carParkOpIcon", svgSourceDir+"openedcarpark.svg", details, details_de, details_en)
 try: carParkOp.run()
 except IndexError:
     print("No locations found")
 
-carParkCov = GenerateLayer(geojson_destDir, Herrenberg_bbox,  """nwr[amenity=parking]["access"!="private"]["access"!="customers"]["parking"!="surface"]({{bbox}});""", "Parkhaus/Tiefgarage", "Multi-story/underground car parking", "carParkCovIcon", svgSourceDir+"coveredcarpark.svg", details, details_de, details_en)
+carParkCov = GenerateLayer(geojson_destDir, Herrenberg_bbox,   """"""nwr[amenity=parking]["access"!="private"]["access"!="customers"]["parking"!="surface"]({{bbox}}); """""", "Parkhaus/Tiefgarage", "Multi-story/underground car parking", "carParkCovIcon", svgSourceDir+"coveredcarpark.svg", details, details_de, details_en)
 try: carParkCov.run()
 except IndexError:
     print("No locations found")
@@ -63,7 +64,7 @@ try: carShare.run()
 except IndexError:
     print("No locations found")
 
-carPR = GenerateLayer(geojson_destDir, Herrenberg_bbox, """nwr[amenity=parking]["park_ride"="yes"]({{bbox}});""", "Park-Und-Ride", "Park and Ride", "carPRIcon", svgSourceDir+"parkandride.svg", details, details_de, details_en)
+carPR = GenerateLayer(geojson_destDir, Herrenberg_bbox,  """"""nwr[amenity=parking]["park_ride"="yes"]({{bbox}}); """""", "Park-Und-Ride", "Park and Ride", "carPRIcon", svgSourceDir+"parkandride.svg", details, details_de, details_en)
 try: carPR.run()
 except IndexError:
     print("No locations found")
