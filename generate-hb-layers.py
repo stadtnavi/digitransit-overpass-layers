@@ -11,10 +11,10 @@ details = ["capacity", "opening_hours", "contact:phone", "phone", "wheelchair", 
 details_de = ["Kapazität", "Öffnungszeiten", "Telefon", "Telefon", "Barrierefrei", "Gebühr", "Webseite", "Webseite"]
 details_en = ["Capacity", "Opening hours", "Phone", "Phone", "Wheelchair", "Fee", "Website", "Website"]
 
-bikeMon = GenerateLayer(geojson_destDir, Herrenberg_bbox,  """nwr["man_made"="monitoring_station"]["monitoring:bicycle"="yes"]({{bbox}});""", "Fahrradzählstelle", "Bicycle monitoring station", "bikeMonIcon", svgSourceDir+"bikemonitoring.svg", details, details_de, details_en)
-try: bikeMon.run()
-except IndexError:
-    print("No locations found")
+#bikeMon = GenerateLayer(geojson_destDir, Herrenberg_bbox,  """nwr["man_made"="monitoring_station"]["monitoring:bicycle"="yes"]({{bbox}});""", "Fahrradzählstelle", "Bicycle monitoring station", "bikeMonIcon", svgSourceDir+"bikemonitoring.svg", details, details_de, details_en)
+#try: bikeMon.run()
+#except IndexError:
+#    print("No locations found")
 
 bikeCharge = GenerateLayer(geojson_destDir, Herrenberg_bbox, "nwr[amenity=charging_station][bicycle=yes]({{bbox}});", "Fahrradladestation", "Bicycle charging station", "bikeChargeIcon", svgSourceDir+"bikecharge.svg", details, details_de, details_en)
 try: bikeCharge.run()

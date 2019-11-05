@@ -167,7 +167,7 @@ class GenerateLayer:
         print(bbQuery)
 
         response = self.api.get(bbQuery, 'geojson', build=False)
-        print(response)
+        #print(response)
 
         self.geojson_response = osmtogeojson.process_osm_json(response)
         self.write_geojson_file(self.geojson_response, self.fileName)
