@@ -59,5 +59,5 @@ You have to make sure that all the given URLs are valid **and** you shouldn't in
 You can add the bounding box (ENV_BBOX), the icon source dir (ENV_ICONSRC) and the destination directory for the 
 GeoJson files (ENV_DDIR) via environment variables.  
 ```cmd
-$ python ENV_BBOX="<coordinates>" ENV_ICONSRC="./iconSourceDir/" ENV_DDIR="./destDir/" generate-hb-layers.py
+$ ENV_BBOX="<coordinates>" ENV_ICONSRC="./iconSourceDir/" ENV_DDIR="./destDir/" python generate-hb-layers.py
 ``` 
