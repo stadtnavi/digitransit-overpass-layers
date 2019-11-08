@@ -189,7 +189,7 @@ class GenerateLayer:
         return overpass_query.replace('{{bbox}}',self.bbox)
     
     def write_geojson_file(self, geojson_response, fileName):
-         with open(self.fileName, "w") as file:
+         with open(self.fileName, "w+") as file:
             json.dump(self.geojson_response, file)
     
     def open_file(self, fileName):
