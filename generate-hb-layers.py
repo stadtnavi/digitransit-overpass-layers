@@ -8,70 +8,30 @@ svgSourceDir = os.getenv('ENV_ICONSRC', "./layer-icons/")
 
 geojson_destDir = os.getenv('ENV_DDIR', "../digitransit-ui/static/assets/geojson/hb-layers/")
 details = ["capacity", "opening_hours", "contact:phone", "phone", "wheelchair", "fee", "contact:website", "website"]
-details_de = ["Kapazität", "Öffnungszeiten", "Telefon", "Telefon", "Barrierefrei", "Gebühr", "Webseite", "Webseite"]
+details_de = ["Stellplätze", "Öffnungszeiten", "Telefon", "Telefon", "Barrierefrei", "Gebührenpflichtig:", "Webseite", "Webseite"]
 details_en = ["Capacity", "Opening hours", "Phone", "Phone", "Wheelchair", "Fee", "Website", "Website"]
 
-bikeMon = GenerateLayer(geojson_destDir, bbox,  """nwr["man_made"="monitoring_station"]["monitoring:bicycle"="yes"]({{bbox}});""", "Fahrradzählstelle", "Bicycle monitoring station", "bikeMonIcon", svgSourceDir+"bikemonitoring.svg", details, details_de, details_en)
-try: bikeMon.run()
-except IndexError:
-    print("No locations found")
+layerGenerator = GenerateLayer(geojson_destDir, bbox, details, details_de, details_en)
 
-bikeCharge = GenerateLayer(geojson_destDir, bbox, "nwr[amenity=charging_station][bicycle=yes]({{bbox}});", "Fahrradladestation", "Bicycle charging station", "bikeChargeIcon", svgSourceDir+"bikecharge.svg", details, details_de, details_en)
-try: bikeCharge.run()
-except IndexError:
-    print("No locations found")
+layerGenerator.run("nwr[amenity=bicycle_parking][covered=no]({{bbox}});", "Fahrradstellplatz", "Open-air bike park", "bikeParkOpIcon", svgSourceDir+"openedbikepark.svg")
+layerGenerator.run("nwr[amenity=bicycle_parking][covered=yes]({{bbox}});", "Überdachter Fahrradstellplatz", "Covered bike park", "bikeParkCovIcon", svgSourceDir+"coveredbikepark2.svg")
+layerGenerator.merge_layers(geojson_destDir, ["coveredbikepark.geojson","open-airbikepark.geojson"], "bicycle-parking.geojson")
 
-bikeParkOp = GenerateLayer(geojson_destDir, bbox, "nwr[amenity=bicycle_parking][covered=no]({{bbox}});", "Fahrradstellplatz", "Open-air bike park", "bikeParkOpIcon", svgSourceDir+"openedbikepark.svg", details, details_de, details_en)
-try: bikeParkOp.run()
-except IndexError:
-    print("No locations found")
+layerGenerator.run("""nwr["man_made"="monitoring_station"]["monitoring:bicycle"="yes"]({{bbox}});""", "Fahrradzählstelle", "Bicycle monitoring station", "layerGeneratorIcon", svgSourceDir+"bikemonitoring.svg")
+layerGenerator.run("nwr[amenity=bicycle_repair_station]({{bbox}});", "Fahrradreparaturstation", "Bicycle repair station", "bikeRepIcon", svgSourceDir+"bikerepair.svg")
+layerGenerator.run("nwr[shop=bicycle]({{bbox}});", "Fahrradgeschäft", "Bicycle shop", "bikeShopIcon", svgSourceDir+"bikeshop2.svg")
+layerGenerator.merge_layers(geojson_destDir, ["bicyclemonitoringstation.geojson","bicyclerepairstation.geojson","bicycleshop.geojson"], "bicycleinfrastructure.geojson")
 
-bikeParkCov = GenerateLayer(geojson_destDir, bbox, "nwr[amenity=bicycle_parking][covered=yes]({{bbox}});", "Überdachter Fahrradstellplatz", "Covered bike park", "bikeParkCovIcon", svgSourceDir+"coveredbikepark2.svg", details, details_de, details_en)
-try: bikeParkCov.run()
-except IndexError:
-    print("No locations found")
+layerGenerator.run("nwr[amenity=charging_station][bicycle=yes]({{bbox}});", "Fahrradladestation", "Bicycle charging station", "bikeChargeIcon", svgSourceDir+"bikecharge.svg")
+layerGenerator.run("nwr[amenity=charging_station][car=yes]({{bbox}});", "Elektroauto-Ladestation", "Car charging station", "carChargeIcon", svgSourceDir+"carcharge.svg")
+layerGenerator.merge_layers(geojson_destDir, ["bicyclechargingstation.geojson","carchargingstation.geojson"], "charging.geojson")
 
-bikeRent = GenerateLayer(geojson_destDir, bbox, "nwr[amenity=bicycle_rental]({{bbox}});", "Fahrradverleih", "Bike rental", "bikeRentIcon", svgSourceDir+"bikerent.svg", details, details_de, details_en)
-try: bikeRent.run()
-except IndexError:
-    print("No locations found")
+layerGenerator.run("""(nwr[amenity=parking]["access"!="private"]["access"!="customers"]({{bbox}});)->.parkings;nwr.parkings(if: (is_number(t["capacity"]) && t["capacity"]>10));""", "Parkplatz", "Car parking", "carParkOpIcon", svgSourceDir+"openedcarpark.svg")
+layerGenerator.run("""nwr[amenity=parking]["access"!="private"]["access"!="customers"]["parking"!="surface"]({{bbox}}); """, "Parkhaus/Tiefgarage", "Multi-storey/underground car parking", "carParkCovIcon", svgSourceDir+"coveredcarpark.svg")
+layerGenerator.run("""nwr[amenity=parking]["park_ride"="yes"]({{bbox}}); """, "Park-Und-Ride", "Park and Ride", "carPRIcon", svgSourceDir+"parkandride.svg")
+layerGenerator.merge_layers(geojson_destDir, ["carparking.geojson","parkandride.geojson","multi-storeyundergroundcarparking.geojson"], "car-parking.geojson")
 
-bikeRep = GenerateLayer(geojson_destDir, bbox, "nwr[amenity=bicycle_repair_station]({{bbox}});", "Fahrradreparaturstation", "Bicycle repair station", "bikeRepIcon", svgSourceDir+"bikerepair.svg", details, details_de, details_en)
-try: bikeRep.run()
-except IndexError:
-    print("No locations found")
-
-bikeShop = GenerateLayer(geojson_destDir, bbox, "nwr[shop=bicycle]({{bbox}});", "Fahrradgeschäft", "Bicycle shop", "bikeShopIcon", svgSourceDir+"bikeshop2.svg", details, details_de, details_en)
-try: bikeShop.run()
-except IndexError:
-    print("No locations found")
-
-carCharge = GenerateLayer(geojson_destDir, bbox, "nwr[amenity=charging_station][car=yes]({{bbox}});", "Elktroauto-Ladestation", "Car charging station", "carChargeIcon", svgSourceDir+"carcharge.svg", details, details_de, details_en)
-try: carCharge.run()
-except IndexError:
-    print("No locations found")
-
-carParkOp = GenerateLayer(geojson_destDir, bbox,  """(nwr[amenity=parking]["access"!="private"]["access"!="customers"]({{bbox}});)->.parkings;nwr.parkings(if: (is_number(t["capacity"]) && t["capacity"]>10));""", "Parkplatz", "Car parking", "carParkOpIcon", svgSourceDir+"openedcarpark.svg", details, details_de, details_en)
-try: carParkOp.run()
-except IndexError:
-    print("No locations found")
-
-carParkCov = GenerateLayer(geojson_destDir, bbox,   """nwr[amenity=parking]["access"!="private"]["access"!="customers"]["parking"!="surface"]({{bbox}}); """, "Parkhaus/Tiefgarage", "Multi-story/underground car parking", "carParkCovIcon", svgSourceDir+"coveredcarpark.svg", details, details_de, details_en)
-try: carParkCov.run()
-except IndexError:
-    print("No locations found")
-
-carShare = GenerateLayer(geojson_destDir, bbox, "nwr[amenity=car_sharing]({{bbox}});", "Car-Sharing", "Car sharing", "carShareIcon", svgSourceDir+"carshare.svg", details, details_de, details_en)
-try: carShare.run()
-except IndexError:
-    print("No locations found")
-
-carPR = GenerateLayer(geojson_destDir, bbox,  """nwr[amenity=parking]["park_ride"="yes"]({{bbox}}); """, "Park-Und-Ride", "Park and Ride", "carPRIcon", svgSourceDir+"parkandride.svg", details, details_de, details_en)
-try: carPR.run()
-except IndexError:
-    print("No locations found")
-
-taxi = GenerateLayer(geojson_destDir, bbox, "nwr[amenity=taxi]({{bbox}});", "Taxi Standort", "Taxi stand", "taxiIcon", svgSourceDir+"taxi.svg", details, details_de, details_en)
-try: taxi.run()
-except IndexError:
-    print("No locations found")
+layerGenerator.run("nwr[amenity=taxi]({{bbox}});", "Taxi-Stellplatz", "Taxi stand", "taxiIcon", svgSourceDir+"taxi.svg")
+layerGenerator.run("nwr[amenity=car_sharing]({{bbox}});", "Car-Sharing", "Car sharing", "carShareIcon", svgSourceDir+"carshare.svg")
+layerGenerator.run("nwr[amenity=bicycle_rental]({{bbox}});", "Fahrradverleih", "Bike rental", "bikeRentIcon", svgSourceDir+"bikerent.svg")
+layerGenerator.merge_layers(geojson_destDir, ["taxistand.geojson","carsharing.geojson","bikerental.geojson"], "taxi-and-sharing.geojson")

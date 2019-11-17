@@ -139,66 +139,71 @@ osmtogeojson._process_relations = _process_relations
 
 #%%
 class GenerateLayer:
-    def __init__(self, dest_dir, bbox, query, name_de, name_en, iconId, iconSourceFile, details, details_de, details_en):
+    def __init__(self, dest_dir, bbox, details, details_de, details_en):
         self.necessary_properties = ['name', 'name_en', 'name_de', 'address', 'address_en', 'address_de', 'icon']
         self.details = details
         self.details_de = details_de
         self.details_en = details_en
-
         self.dest_dir = dest_dir
-        self.default_name = name_de
-        self.fileName = name_en.replace(" ", "").replace("/", "")
-        self.fileName = self.fileName.lower()
-        self.fileName = self.dest_dir+self.fileName+'.geojson'
-        self.query = query
         self.bbox = bbox
-        self.name_de = name_de
-        self.name_en = name_en
-        self.iconId = iconId
-        self.iconSourceFile = iconSourceFile
-
-        self.queryDict = self.create_query_dict(self.query)
-        self.iconSource = self.read_svg_source(self.iconSourceFile)
-
+        
         self.api = overpass.API(timeout=600)
         
-    def run(self):
-        bbQuery = self.modify_query(self.queryDict, self.bbox)
+    def run(self, query, name_de, name_en, iconId, iconSourceFile):
+        default_name = name_de
+        layerName = name_en.replace(" ", "").replace("/", "").lower()
+        filePath = self.dest_dir + layerName + '.geojson'
+        iconSource = self.read_svg_source(iconSourceFile)
+        
+        bbQuery = self._prepare_overpass_query(query, self.bbox)
         print(bbQuery)
 
         response = self.api.get(bbQuery, 'geojson', build=False)
         #print(response)
 
-        self.geojson_response = osmtogeojson.process_osm_json(response)
-        self.write_geojson_file(self.geojson_response, self.fileName)
+        data = osmtogeojson.process_osm_json(response)
+        #self.write_geojson_file(geojson_response, filePath)
         
-        self.data = self.open_file(self.fileName)
-        self.add_properties(self.default_name, self.name_de, self.name_en)
-        self.localize_description()
-        self.set_default_description()
-        self.add_icon(self.iconId, self.iconSource)
-        self.delete_unnecessary_properties(self.necessary_properties)
-        self.modify_file(self.geojson_response)
+        #data = self._load_json_file(filePath)
+        self.add_properties(data, default_name, name_de, name_en)
+        self.localize_description(data)
+        self.set_default_description(data)
+        self.add_icon(data, iconId, iconSource)
+        self.delete_unnecessary_properties(data, self.necessary_properties)
+        self._write_geojson_file(data, filePath)
 
-    def create_query_dict(self, query):
-        return {"overpass_query" : "[out:json];" + query + " out center;"}
-
-    def modify_query(self, query, bbox):
-    # In the original query there is no bbox specified. This method will change all occurrances.
-        overpass_query = query['overpass_query']
-        return overpass_query.replace('{{bbox}}',self.bbox)
+    def merge_layers(self, dir, layer_file_names, dest_file_name):
+        merged_json = None
     
+        for file_name in layer_file_names:
+            layer = self._load_json_file(dir + file_name)
+            if not merged_json:
+                merged_json = layer
+            else:
+                merged_json['features'] += layer['features']
+
+        self._write_geojson_file(merged_json, dir+dest_file_name)
+
+    def _prepare_overpass_query(self, overpass_query, bbox):
+        return "[out:json];" + overpass_query.replace('{{bbox}}', bbox) + " out center;"
+    
+<<<<<<< HEAD
     def write_geojson_file(self, geojson_response, fileName):
          with open(self.fileName, "w+") as file:
             json.dump(self.geojson_response, file)
+=======
+    def _write_geojson_file(self, data, fileName):
+         with open(fileName, "w") as file:
+            json.dump(data, file, indent=2)
+>>>>>>> Refactoring and introduction of merge_layers
     
-    def open_file(self, fileName):
+    def _load_json_file(self, fileName):
         with open(fileName) as file:
             data = json.load(file)
         return data
     
-    def add_properties(self, default_name, name_de, name_en):
-        for feat in self.data['features']:
+    def add_properties(self, data, default_name, name_de, name_en):
+        for feat in data['features']:
             # set the name properties (localized)
             # If the location has it's own name, all localized versions get the original value.
             if not 'name_en' in feat['properties'] and 'name' in feat['properties']:
@@ -221,8 +226,8 @@ class GenerateLayer:
                     feat['properties']['address_de'].append(key+': ' + feat['properties'][key] + ', ')
                     feat['properties']['address_en'].append(key+': ' + feat['properties'][key] + ', ')
 
-    def localize_description(self):
-        for feat in self.data['features']:
+    def localize_description(self, data):
+        for feat in data['features']:
             if 'address_de' in feat['properties']:
                 # Tu -> Di, Wed -> Mi, Th -> Do, Su -> So, yes -> ja, no -> nein
                 desc = ''.join(feat['properties']['address_de'])
@@ -249,7 +254,7 @@ class GenerateLayer:
                     desc = desc.replace("Webseite:", "<a href=\""+url+"\" target=\"_blank\">Webseite</a>,")
                     desc = desc.replace(url+",", "")
                 # Strip the end
-                    desc = desc.rstrip(' ').rstrip(',')
+                desc = desc.rstrip(' ').rstrip(',')
                 # Rewrite the address field.
                 feat['properties']['address_de'] = desc
             if 'address_en' in feat['properties']:
@@ -268,37 +273,36 @@ class GenerateLayer:
                     desc = desc.replace("Website:", "<a href=\""+url+"\" target=\"_blank\">Website</a>,")
                     desc = desc.replace(url+",", "")
                 # Strip the end
-                    desc = desc.rstrip(' ').rstrip(',')
+                desc = desc.rstrip(' ').rstrip(',')
                 # Rewrite the address field.
                 feat['properties']['address_en'] = desc
 
-    def set_default_description(self):
+    def set_default_description(self, data):
     # Set the default description as one of the listed locales.
-        for feat in self.data['features']:
+        for feat in data['features']:
             feat['properties']['address'] = feat['properties']['address_de']
 
     def read_svg_source(self, iconSourceFile):
-        with open(self.iconSourceFile, 'r') as file:
+        with open(iconSourceFile, 'r') as file:
             iconSource = file.read().replace('\n', '')
         return iconSource
 
-    def add_icon(self, iconId, iconSource):
+    def add_icon(self, data, iconId, iconSource):
         # In the same type of feature the icon is the same. The icon.id has to be set for every feature.
-        for feat in self.data['features']:
+        for feat in data['features']:
             if not 'icon' in feat['properties']:
                 feat['properties']['icon'] = {}
             if not 'id' in feat['properties']['icon']:
                 feat['properties']['icon']['id'] = iconId
 
         # Only the very first feature has to have the SVG source of the icon.
-        self.data['features'][0]['properties']['icon']['svg'] = iconSource
+        if len(data['features']) > 0:
+            data['features'][0]['properties']['icon']['svg'] = iconSource
     
-    def delete_unnecessary_properties(self, necessary_properties):
-        if 'generator' in self.data:
-            del self.data['generator']
-        if 'copyright' in self.data:
-            del self.data['copyright']
-        for feat in self.data['features']:
+    def delete_unnecessary_properties(self, data, necessary_properties):
+        if 'generator' in data:
+            del data['generator']
+        for feat in data['features']:
             if 'generator' in feat:
                 del feat['generator']
             if 'id' in feat:
@@ -306,7 +310,6 @@ class GenerateLayer:
             for key in list(feat['properties']):
                 if not key in self.necessary_properties:
                     del feat['properties'][key]
-    
-    def modify_file(self, fileName):
-        with open(self.fileName, "w") as f:
-            json.dump(self.data, f, indent=2)
+
+
+
