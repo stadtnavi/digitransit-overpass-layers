@@ -7,9 +7,9 @@ bbox = os.getenv('ENV_BBOX', "48.51592209023528,8.533287048339844,48.72607645125
 svgSourceDir = os.getenv('ENV_ICONSRC', "./layer-icons/")
 
 geojson_destDir = os.getenv('ENV_DDIR', "../digitransit-ui/static/assets/geojson/hb-layers/")
-details = ["capacity", "opening_hours", "contact:phone", "phone", "wheelchair", "fee", "contact:website", "website"]
-details_de = ["Stellplätze", "Öffnungszeiten", "Telefon", "Telefon", "Barrierefrei", "Gebührenpflichtig:", "Webseite", "Webseite"]
-details_en = ["Capacity", "Opening hours", "Phone", "Phone", "Wheelchair", "Fee", "Website", "Website"]
+details = ["capacity", "opening_hours", "contact:phone", "phone", "wheelchair", "fee"]
+details_de = ["Stellplätze", "Öffnungszeiten", "Telefon", "Telefon", "Barrierefrei", "Gebührenpflichtig:"]
+details_en = ["Capacity", "Opening hours", "Phone", "Phone", "Wheelchair", "Fee"]
 
 layerGenerator = GenerateLayer(geojson_destDir, bbox, details, details_de, details_en)
 
