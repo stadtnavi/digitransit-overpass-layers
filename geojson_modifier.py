@@ -187,15 +187,9 @@ class GenerateLayer:
     def _prepare_overpass_query(self, overpass_query, bbox):
         return "[out:json];" + overpass_query.replace('{{bbox}}', bbox) + " out center;"
     
-<<<<<<< HEAD
-    def write_geojson_file(self, geojson_response, fileName):
-         with open(self.fileName, "w+") as file:
-            json.dump(self.geojson_response, file)
-=======
     def _write_geojson_file(self, data, fileName):
          with open(fileName, "w") as file:
             json.dump(data, file, indent=2)
->>>>>>> Refactoring and introduction of merge_layers
     
     def _load_json_file(self, fileName):
         with open(fileName) as file:
