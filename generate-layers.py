@@ -29,7 +29,8 @@ layerGenerator.merge_layers(geojson_destDir, ["bicyclechargingstation.geojson","
 layerGenerator.run("""(nwr[amenity=parking]["parking"!~"underground|multi-storey"]["access"!~"customers|private|permissive"]({{bbox}});)->.parkings;nwr.parkings(if: (is_number(t["capacity"]) && t["capacity"]>10));""", "Parkplatz", "Car parking", "carParkOpIcon", svgSourceDir+"openedcarpark.svg")
 layerGenerator.run("""nwr[amenity=parking]["access"!~"private|customers|permissive"]["parking"~"multi-storey|underground"]({{bbox}});""", "Parkhaus/Tiefgarage", "Multi-storey/underground car parking", "carParkCovIcon", svgSourceDir+"coveredcarpark.svg")
 layerGenerator.run("""nwr[amenity=parking][park_ride]["park_ride"!="no"]({{bbox}}); """, "Park-Und-Ride", "Park and Ride", "carPRIcon", svgSourceDir+"parkandride.svg")
-layerGenerator.merge_layers(geojson_destDir, ["carparking.geojson","parkandride.geojson","multi-storeyundergroundcarparking.geojson"], "car-parking.geojson")
+layerGenerator.run("nwr[tourism=caravan_site]({{bbox}});", "Wohnmobilstellplatz", "Caravan site", "caravanIcon", svgSourceDir+"womoparken.svg")
+layerGenerator.merge_layers(geojson_destDir, ["carparking.geojson","parkandride.geojson","multi-storeyundergroundcarparking.geojson", "caravansite.geojson"], "car-parking.geojson")
 
 layerGenerator.run("nwr[amenity=taxi]({{bbox}});", "Taxi-Stellplatz", "Taxi stand", "taxiIcon", svgSourceDir+"taxi.svg")
 layerGenerator.run("nwr[amenity=car_sharing]({{bbox}});", "Car-Sharing", "Car sharing", "carShareIcon", svgSourceDir+"carsharing.svg")
