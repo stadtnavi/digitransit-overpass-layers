@@ -8,7 +8,7 @@ svgSourceDir = os.getenv('ENV_ICONSRC', "./layer-icons/")
 
 geojson_destDir = os.getenv('ENV_DDIR', "../digitransit-ui/static/assets/geojson/hb-layers/")
 details = ["capacity", "opening_hours", "contact:phone", "phone", "wheelchair", "fee"]
-details_de = ["Stellplätze", "Öffnungszeiten", "Telefon", "Telefon", "Barrierefrei", "Gebührenpflichtig:"]
+details_de = ["Stellplätze", "Öffnungszeiten", "Telefon", "Telefon", "Barrierefrei", "Gebührenpflichtig"]
 details_en = ["Capacity", "Opening hours", "Phone", "Phone", "Wheelchair", "Fee"]
 
 layerGenerator = GenerateLayer(geojson_destDir, bbox, details, details_de, details_en)
@@ -28,7 +28,7 @@ layerGenerator.merge_layers(geojson_destDir, ["bicyclechargingstation.geojson","
 
 layerGenerator.run("""(nwr[amenity=parking]["parking"!~"underground|multi-storey"]["access"!~"customers|private|permissive"]({{bbox}});)->.parkings;nwr.parkings(if: (is_number(t["capacity"]) && t["capacity"]>10));""", "Parkplatz", "Car parking", "carParkOpIcon", svgSourceDir+"openedcarpark.svg")
 layerGenerator.run("""nwr[amenity=parking]["access"!~"private|customers|permissive"]["parking"~"multi-storey|underground"]({{bbox}});""", "Parkhaus/Tiefgarage", "Multi-storey/underground car parking", "carParkCovIcon", svgSourceDir+"coveredcarpark.svg")
-layerGenerator.run("""nwr[amenity=parking]["park_ride"!="no"]({{bbox}}); """, "Park-Und-Ride", "Park and Ride", "carPRIcon", svgSourceDir+"parkandride.svg")
+layerGenerator.run("""nwr[amenity=parking][park_ride]["park_ride"!="no"]({{bbox}}); """, "Park-Und-Ride", "Park and Ride", "carPRIcon", svgSourceDir+"parkandride.svg")
 layerGenerator.merge_layers(geojson_destDir, ["carparking.geojson","parkandride.geojson","multi-storeyundergroundcarparking.geojson"], "car-parking.geojson")
 
 layerGenerator.run("nwr[amenity=taxi]({{bbox}});", "Taxi-Stellplatz", "Taxi stand", "taxiIcon", svgSourceDir+"taxi.svg")
