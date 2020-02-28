@@ -223,12 +223,12 @@ class GenerateLayer:
     def localize_description(self, data):
         for feat in data['features']:
             if 'address_de' in feat['properties']:
-                # Tu -> Di, Wed -> Mi, Th -> Do, Su -> So, yes -> ja, no -> nein
+                # Tu -> Di, Wed -> Mi, Th -> Do, yes -> ja, no -> nein
                 desc = ''.join(feat['properties']['address_de'])
                 desc = re.sub(r"\bTu\b", "Di", desc)
                 desc = re.sub(r"\bWe\b", "Mi", desc)
                 desc = re.sub(r"\bTh\b", "Do", desc)
-                desc = re.sub(r"\Sa\b", "So", desc)
+                desc = re.sub(r"\bSu\b", "So", desc)
                 # yes -> ja, no -> nein
                 desc = re.sub(r"\byes\b", "ja", desc)
                 desc = re.sub(r"\bno\b", "nein", desc)
