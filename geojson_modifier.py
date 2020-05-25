@@ -11,11 +11,11 @@ from osmtogeojson import osmtogeojson
 # ### UpdateLayer class' functions
 # * get data from Overpass-API
 #     * change it into geojson format
-# * add _name_ and _address_ localized attributes for each feature
+# * add _name_ and _popupContent_ localized attributes for each feature
 #     * _name_ attribute have also English and German versions
-#     * _address_ attribute have the values of prior _opening_hours_, _phone_ and _capacity_ attributes (if they were defined)
+#     * _popupContent_ attribute have the values of prior _opening_hours_, _phone_ and _capacity_ attributes (if they were defined)
 # * delete unnecessary attributes (also the above mentioned ones due to their copied values)
-# * localize the _address_ property's value: name of days are in German and in English too
+# * localize the _popupContent_ property's value: name of days are in German and in English too
 # * each type of location has its own icon
 
 #%% [markdown]
@@ -140,7 +140,7 @@ osmtogeojson._process_relations = _process_relations
 #%%
 class GenerateLayer:
     def __init__(self, dest_dir, bbox, details, details_de, details_en):
-        self.necessary_properties = ['name', 'name_en', 'name_de', 'address', 'address_en', 'address_de', 'icon']
+        self.necessary_properties = ['name', 'name_en', 'name_de', 'address', 'address_en', 'address_de', 'popupContent', 'popupContent_de', 'popupContent_en', 'icon']
         self.details = details
         self.details_de = details_de
         self.details_en = details_en
@@ -210,21 +210,21 @@ class GenerateLayer:
                 feat['properties']['name_de'] = name_de
             if not 'name' in feat['properties']:
                 feat['properties']['name'] = default_name
-            # if not yet exists, create the address properties; if exists, make them empty arrays (localized)
-            feat['properties']['address'] = []
-            feat['properties']['address_de'] = []
-            feat['properties']['address_en'] = []
-            # add the listed (in details array) properties to the address property (these will be displayed)
+            # create the popupContent properties
+            feat['properties']['popupContent'] = []
+            feat['properties']['popupContent_de'] = []
+            feat['properties']['popupContent_en'] = []
+            # add the listed (in details array) properties to the popupContent property (these will be displayed)
             for key in feat['properties']:
                 if key in self.details:
-                    feat['properties']['address_de'].append(key+': ' + feat['properties'][key] + ', ')
-                    feat['properties']['address_en'].append(key+': ' + feat['properties'][key] + ', ')
+                    feat['properties']['popupContent_de'].append(key+': ' + feat['properties'][key] + ', ')
+                    feat['properties']['popupContent_en'].append(key+': ' + feat['properties'][key] + ', ')
 
     def localize_description(self, data):
         for feat in data['features']:
-            if 'address_de' in feat['properties']:
+            if 'popupContent_de' in feat['properties']:
                 # Tu -> Di, Wed -> Mi, Th -> Do, Su -> So, yes -> ja, no -> nein
-                desc = ''.join(feat['properties']['address_de'])
+                desc = ''.join(feat['properties']['popupContent_de'])
                 desc = re.sub(r"\bTu\b", "Di", desc)
                 desc = re.sub(r"\bWe\b", "Mi", desc)
                 desc = re.sub(r"\bTh\b", "Do", desc)
@@ -249,10 +249,10 @@ class GenerateLayer:
                     desc = desc.replace(url+",", "")
                 # Strip the end
                 desc = desc.rstrip(' ').rstrip(',')
-                # Rewrite the address field.
-                feat['properties']['address_de'] = desc
-            if 'address_en' in feat['properties']:
-                desc = ''.join(feat['properties']['address_en'])
+                # Rewrite the popupContent field.
+                feat['properties']['popupContent_de'] = desc
+            if 'popupContent_en' in feat['properties']:
+                desc = ''.join(feat['properties']['popupContent_en'])
                 # At opening hours PH off won't be displayed.
                 desc = desc.replace(" PH off, ", "")
                 # Translate as declared in the details_$locale array.
@@ -268,13 +268,13 @@ class GenerateLayer:
                     desc = desc.replace(url+",", "")
                 # Strip the end
                 desc = desc.rstrip(' ').rstrip(',')
-                # Rewrite the address field.
-                feat['properties']['address_en'] = desc
+                # Rewrite the popupContent field.
+                feat['properties']['popupContent_en'] = desc
 
     def set_default_description(self, data):
     # Set the default description as one of the listed locales.
         for feat in data['features']:
-            feat['properties']['address'] = feat['properties']['address_de']
+            feat['properties']['popupContent'] = feat['properties']['popupContent_de']
 
     def read_svg_source(self, iconSourceFile):
         with open(iconSourceFile, 'r') as file:
@@ -304,6 +304,3 @@ class GenerateLayer:
             for key in list(feat['properties']):
                 if not key in self.necessary_properties:
                     del feat['properties'][key]
-
-
-
