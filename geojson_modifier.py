@@ -140,7 +140,7 @@ osmtogeojson._process_relations = _process_relations
 #%%
 class GenerateLayer:
     def __init__(self, dest_dir, bbox, details, details_de, details_en):
-        self.necessary_properties = ['name', 'name_en', 'name_de', 'address', 'popupContent', 'popupContent_de', 'popupContent_en', 'icon']
+        self.necessary_properties = ['name', 'name_en', 'name_de', 'address', 'popupContent', 'popupContent_de', 'popupContent_en', 'icon', 'city']
         self.details = details
         self.details_de = details_de
         self.details_en = details_en
