@@ -228,7 +228,7 @@ class GenerateLayer:
                 desc = re.sub(r"\bTu\b", "Di", desc)
                 desc = re.sub(r"\bWe\b", "Mi", desc)
                 desc = re.sub(r"\bTh\b", "Do", desc)
-                desc = re.sub(r"\bSu\b", "So", desc)
+                desc = re.sub(r"\Su\b", "So", desc)
                 # yes -> ja, no -> nein
                 desc = re.sub(r"\byes\b", "ja", desc)
                 desc = re.sub(r"\bno\b", "nein", desc)
