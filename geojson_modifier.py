@@ -211,7 +211,7 @@ class GenerateLayer:
             if not 'name' in feat['properties']:
                 feat['properties']['name'] = default_name
             # modifying name for 'Nette Toilette' nodes
-            if feat['properties']['toilets:scheme'] == 'Nette Toilette':
+            if 'toilets:scheme' in feat['properties'] and feat['properties']['toilets:scheme'] == 'Nette Toilette':
                 feat['properties']['name'] = 'Nette Toilette ' + '"' + feat['properties']['name'] + '"'
                 feat['properties']['name_en'] = 'Public toilet ' + '"' + feat['properties']['name_en'] + '"'
                 feat['properties']['name_de'] = 'Nette Toilette ' + '"' + feat['properties']['name_de'] + '"'
