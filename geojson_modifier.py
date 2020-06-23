@@ -210,6 +210,11 @@ class GenerateLayer:
                 feat['properties']['name_de'] = name_de
             if not 'name' in feat['properties']:
                 feat['properties']['name'] = default_name
+            # modifying name for 'Nette Toilette' nodes
+            if feat['properties']['toilets:scheme'] == 'Nette Toilette':
+                feat['properties']['name'] = 'Nette Toilette ' + '"' + feat['properties']['name'] + '"'
+                feat['properties']['name_en'] = 'Public toilet ' + '"' + feat['properties']['name_en'] + '"'
+                feat['properties']['name_de'] = 'Nette Toilette ' + '"' + feat['properties']['name_de'] + '"'
             # if not yet exists, create the address properties; if exists, make them empty arrays (localized)
             feat['properties']['address'] = []
             feat['properties']['address_de'] = []
