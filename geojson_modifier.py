@@ -214,17 +214,12 @@ class GenerateLayer:
             feat['properties']['popupContent'] = []
             feat['properties']['popupContent_de'] = []
             feat['properties']['popupContent_en'] = []
-            # add the listed (in details array) properties to the popupContent property (these will be displayed)
             # modifying name for 'Nette Toilette' nodes
             if feat['properties']['toilets:scheme'] == 'Nette Toilette':
                 feat['properties']['name'] = 'Nette Toilette ' + '"' + feat['properties']['name'] + '"'
                 feat['properties']['name_en'] = 'Public toilet ' + '"' + feat['properties']['name_en'] + '"'
                 feat['properties']['name_de'] = 'Nette Toilette ' + '"' + feat['properties']['name_de'] + '"'
-            # if not yet exists, create the address properties; if exists, make them empty arrays (localized)
-            feat['properties']['address'] = []
-            feat['properties']['address_de'] = []
-            feat['properties']['address_en'] = []
-            # add the listed (in details array) properties to the address property (these will be displayed)
+            # add the listed (in details array) properties to the popupContent property (these will be displayed)
             for key in feat['properties']:
                 if key in self.details:
                     feat['properties']['popupContent_de'].append(key+': ' + feat['properties'][key] + ', ')
