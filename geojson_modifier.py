@@ -215,6 +215,12 @@ class GenerateLayer:
             feat['properties']['popupContent_de'] = []
             feat['properties']['popupContent_en'] = []
             # add the listed (in details array) properties to the popupContent property (these will be displayed)
+            # modifying name for 'Nette Toilette' nodes
+            if feat['properties']['toilets:scheme'] == 'Nette Toilette':
+                feat['properties']['name'] = 'Nette Toilette ' + '"' + feat['properties']['name'] + '"'
+                feat['properties']['name_en'] = 'Public toilet ' + '"' + feat['properties']['name_en'] + '"'
+                feat['properties']['name_de'] = 'Nette Toilette ' + '"' + feat['properties']['name_de'] + '"'
+            # add the listed (in details array) properties to the address property (these will be displayed)
             for key in feat['properties']:
                 if key in self.details:
                     feat['properties']['popupContent_de'].append(key+': ' + feat['properties'][key] + ', ')
@@ -228,7 +234,7 @@ class GenerateLayer:
                 desc = re.sub(r"\bTu\b", "Di", desc)
                 desc = re.sub(r"\bWe\b", "Mi", desc)
                 desc = re.sub(r"\bTh\b", "Do", desc)
-                desc = re.sub(r"\Sa\b", "So", desc)
+                desc = re.sub(r"\bSu\b", "So", desc)
                 # yes -> ja, no -> nein
                 desc = re.sub(r"\byes\b", "ja", desc)
                 desc = re.sub(r"\bno\b", "nein", desc)
