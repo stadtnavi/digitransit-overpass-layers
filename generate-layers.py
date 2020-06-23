@@ -7,9 +7,9 @@ bbox = os.getenv('ENV_BBOX', "48.51592209023528,8.533287048339844,48.72607645125
 svgSourceDir = os.getenv('ENV_ICONSRC', "./layer-icons/")
 
 geojson_destDir = os.getenv('ENV_DDIR', "../digitransit-ui/static/assets/geojson/hb-layers/")
-details = ["capacity", "opening_hours", "contact:phone", "phone", "wheelchair", "fee"]
-details_de = ["Stellplätze", "Öffnungszeiten", "Telefon", "Telefon", "Barrierefrei", "Gebührenpflichtig"]
-details_en = ["Capacity", "Opening hours", "Phone", "Phone", "Wheelchair", "Fee"]
+details = ["capacity", "opening_hours", "contact:phone", "phone", "wheelchair", "fee", "changing_table"]
+details_de = ["Stellplätze", "Öffnungszeiten", "Telefon", "Telefon", "Barrierefrei", "Gebührenpflichtig", "Wickelmöglichkeit"]
+details_en = ["Capacity", "Opening hours", "Phone", "Phone", "Wheelchair", "Fee", "Changing table"]
 
 layerGenerator = GenerateLayer(geojson_destDir, bbox, details, details_de, details_en)
 
@@ -36,3 +36,5 @@ layerGenerator.run("nwr[amenity=taxi]({{bbox}});", "Taxi-Stellplatz", "Taxi stan
 layerGenerator.run("nwr[amenity=car_sharing]({{bbox}});", "Car-Sharing", "Car sharing", "carShareIcon", svgSourceDir+"carsharing.svg")
 layerGenerator.run("nwr[amenity=bicycle_rental]({{bbox}});", "Fahrradverleih", "Bike rental", "bikeRentIcon", svgSourceDir+"bikesharing.svg")
 layerGenerator.merge_layers(geojson_destDir, ["taxistand.geojson","carsharing.geojson","bikerental.geojson"], "taxi-and-sharing.geojson")
+
+layerGenerator.run("nwr['toilets:scheme'='Nette Toilette']({{bbox}});", "Nette Toilette", "Toilet", "toiletIcon", svgSourceDir+"nette_toilette.svg")
