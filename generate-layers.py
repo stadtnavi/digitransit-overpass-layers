@@ -33,7 +33,6 @@ layerGenerator.merge_layers(geojson_destDir, ["carparking.geojson","parkandride.
 
 layerGenerator.run("nwr[amenity=taxi]({{bbox}});", "Taxi-Stellplatz", "Taxi stand", "taxiIcon", svgSourceDir+"taxi.svg")
 layerGenerator.run("nwr[amenity=car_sharing]({{bbox}});", "Car-Sharing", "Car sharing", "carShareIcon", svgSourceDir+"carshare.svg")
-layerGenerator.run("nwr[amenity=bicycle_rental]({{bbox}});", "Fahrradverleih", "Bike rental", "bikeRentIcon", svgSourceDir+"bikerent.svg")
-layerGenerator.merge_layers(geojson_destDir, ["taxistand.geojson","carsharing.geojson","bikerental.geojson"], "taxi-and-sharing.geojson")
+layerGenerator.merge_layers(geojson_destDir, ["taxistand.geojson","carsharing.geojson"], "taxi-and-sharing.geojson")
 
 layerGenerator.run("nwr['toilets:scheme'='Nette Toilette']({{bbox}});", "Nette Toilette", "Toilet", "toiletIcon", svgSourceDir+"nette_toilette.svg")
