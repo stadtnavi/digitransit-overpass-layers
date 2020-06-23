@@ -215,7 +215,7 @@ class GenerateLayer:
             feat['properties']['popupContent_de'] = []
             feat['properties']['popupContent_en'] = []
             # modifying name for 'Nette Toilette' nodes
-            if feat['properties']['toilets:scheme'] == 'Nette Toilette':
+            if 'toilets:scheme' in feat['properties'] and feat['properties']['toilets:scheme'] == 'Nette Toilette':
                 feat['properties']['name'] = 'Nette Toilette ' + '"' + feat['properties']['name'] + '"'
                 feat['properties']['name_en'] = 'Public toilet ' + '"' + feat['properties']['name_en'] + '"'
                 feat['properties']['name_de'] = 'Nette Toilette ' + '"' + feat['properties']['name_de'] + '"'
