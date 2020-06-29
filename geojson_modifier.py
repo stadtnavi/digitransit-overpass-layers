@@ -140,7 +140,7 @@ osmtogeojson._process_relations = _process_relations
 #%%
 class GenerateLayer:
     def __init__(self, dest_dir, bbox, details, details_de, details_en):
-        self.necessary_properties = ['name', 'name_en', 'name_de', 'address', 'address_en', 'address_de', 'popupContent', 'popupContent_de', 'popupContent_en', 'icon']
+        self.necessary_properties = ['name', 'name_en', 'name_de', 'address', 'popupContent', 'popupContent_de', 'popupContent_en', 'icon', 'city']
         self.details = details
         self.details_de = details_de
         self.details_en = details_en
@@ -214,13 +214,12 @@ class GenerateLayer:
             feat['properties']['popupContent'] = []
             feat['properties']['popupContent_de'] = []
             feat['properties']['popupContent_en'] = []
-            # add the listed (in details array) properties to the popupContent property (these will be displayed)
             # modifying name for 'Nette Toilette' nodes
             if 'toilets:scheme' in feat['properties'] and feat['properties']['toilets:scheme'] == 'Nette Toilette':
                 feat['properties']['name'] = 'Nette Toilette ' + '"' + feat['properties']['name'] + '"'
                 feat['properties']['name_en'] = 'Public toilet ' + '"' + feat['properties']['name_en'] + '"'
                 feat['properties']['name_de'] = 'Nette Toilette ' + '"' + feat['properties']['name_de'] + '"'
-            # add the listed (in details array) properties to the address property (these will be displayed)
+            # add the listed (in details array) properties to the popupContent property (these will be displayed)
             for key in feat['properties']:
                 if key in self.details:
                     feat['properties']['popupContent_de'].append(key+': ' + feat['properties'][key] + ', ')
@@ -229,7 +228,7 @@ class GenerateLayer:
     def localize_description(self, data):
         for feat in data['features']:
             if 'popupContent_de' in feat['properties']:
-                # Tu -> Di, Wed -> Mi, Th -> Do, Su -> So, yes -> ja, no -> nein
+                # Tu -> Di, We -> Mi, Th -> Do, Su -> So, yes -> ja, no -> nein
                 desc = ''.join(feat['properties']['popupContent_de'])
                 desc = re.sub(r"\bTu\b", "Di", desc)
                 desc = re.sub(r"\bWe\b", "Mi", desc)

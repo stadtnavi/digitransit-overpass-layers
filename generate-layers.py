@@ -14,12 +14,12 @@ details_en = ["Capacity", "Opening hours", "Phone", "Phone", "Wheelchair", "Fee"
 layerGenerator = GenerateLayer(geojson_destDir, bbox, details, details_de, details_en)
 
 layerGenerator.run("nwr[amenity=bicycle_parking][covered=no]({{bbox}});", "Fahrradstellplatz", "Open-air bike park", "bikeParkOpIcon", svgSourceDir+"openedbikepark.svg")
-layerGenerator.run("nwr[amenity=bicycle_parking][covered=yes]({{bbox}});", "Überdachter Fahrradstellplatz", "Covered bike park", "bikeParkCovIcon", svgSourceDir+"coveredbikepark.svg")
+layerGenerator.run("nwr[amenity=bicycle_parking][covered=yes]({{bbox}});", "Überdachter Fahrradstellplatz", "Covered bike park", "bikeParkCovIcon", svgSourceDir+"coveredbikepark2.svg")
 layerGenerator.merge_layers(geojson_destDir, ["coveredbikepark.geojson","open-airbikepark.geojson"], "bicycle-parking.geojson")
 
 layerGenerator.run("""nwr["man_made"="monitoring_station"]["monitoring:bicycle"="yes"]({{bbox}});""", "Fahrradzählstelle", "Bicycle monitoring station", "layerGeneratorIcon", svgSourceDir+"bikemonitoring.svg")
 layerGenerator.run("nwr[amenity=bicycle_repair_station]({{bbox}});", "Fahrradreparaturstation", "Bicycle repair station", "bikeRepIcon", svgSourceDir+"bikerepair.svg")
-layerGenerator.run("nwr[shop=bicycle]({{bbox}});", "Fahrradgeschäft", "Bicycle shop", "bikeShopIcon", svgSourceDir+"bikeshop.svg")
+layerGenerator.run("nwr[shop=bicycle]({{bbox}});", "Fahrradgeschäft", "Bicycle shop", "bikeShopIcon", svgSourceDir+"bikeshop2.svg")
 layerGenerator.merge_layers(geojson_destDir, ["bicyclemonitoringstation.geojson","bicyclerepairstation.geojson","bicycleshop.geojson"], "bicycleinfrastructure.geojson")
 
 layerGenerator.run("nwr[amenity=charging_station][bicycle=yes]({{bbox}});", "Fahrradladestation", "Bicycle charging station", "bikeChargeIcon", svgSourceDir+"bikecharge.svg")
