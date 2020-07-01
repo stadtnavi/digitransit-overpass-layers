@@ -32,8 +32,4 @@ layerGenerator.run("""nwr[amenity=parking][park_ride]["park_ride"!="no"]({{bbox}
 layerGenerator.run("nwr[tourism=caravan_site]({{bbox}});", "Wohnmobilstellplatz", "Caravan site", "caravanIcon", svgSourceDir+"womoparken.svg")
 layerGenerator.merge_layers(geojson_destDir, ["carparking.geojson","parkandride.geojson","multi-storeyundergroundcarparking.geojson", "caravansite.geojson"], "car-parking.geojson")
 
-layerGenerator.run("nwr[amenity=taxi]({{bbox}});", "Taxi-Stellplatz", "Taxi stand", "taxiIcon", svgSourceDir+"taxi.svg")
-layerGenerator.run("nwr[amenity=car_sharing]({{bbox}});", "Car-Sharing", "Car sharing", "carShareIcon", svgSourceDir+"carsharing.svg")
-layerGenerator.merge_layers(geojson_destDir, ["taxistand.geojson","carsharing.geojson"], "taxi-and-sharing.geojson")
-
 layerGenerator.run("nwr['toilets:scheme'='Nette Toilette']({{bbox}});", "Nette Toilette", "Toilet", "toiletIcon", svgSourceDir+"nette_toilette.svg")
