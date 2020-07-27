@@ -140,7 +140,7 @@ osmtogeojson._process_relations = _process_relations
 #%%
 class GenerateLayer:
     def __init__(self, dest_dir, bbox, details, details_de, details_en):
-        self.necessary_properties = ['name', 'name_en', 'name_de', 'address', 'popupContent', 'popupContent_de', 'popupContent_en', 'icon', 'city']
+        self.necessary_properties = ['name', 'name_en', 'name_de', 'address', 'popupContent', 'popupContent_de', 'popupContent_en', 'icon', 'city', 'id']
         self.details = details
         self.details_de = details_de
         self.details_en = details_en
@@ -197,6 +197,7 @@ class GenerateLayer:
         return data
     
     def add_properties(self, data, default_name, name_de, name_en):
+        i = 0
         for feat in data['features']:
             # set the name properties (localized)
             # If the location has it's own name, all localized versions get the original value.
@@ -214,6 +215,8 @@ class GenerateLayer:
             feat['properties']['popupContent'] = []
             feat['properties']['popupContent_de'] = []
             feat['properties']['popupContent_en'] = []
+            # add unique ID
+            feat['properties']['id'] = default_name + '_' + str(i)
             # modifying name for 'Nette Toilette' nodes
             if 'toilets:scheme' in feat['properties'] and feat['properties']['toilets:scheme'] == 'Nette Toilette' and 'toilets' in feat['properties']:
                 feat['properties']['name'] = 'Nette Toilette ' + '"' + feat['properties']['name'] + '"'
@@ -229,6 +232,7 @@ class GenerateLayer:
                 if key in self.details:
                     feat['properties']['popupContent_de'].append(key+': ' + feat['properties'][key] + ', ')
                     feat['properties']['popupContent_en'].append(key+': ' + feat['properties'][key] + ', ')
+            i += 1
 
     def localize_description(self, data):
         for feat in data['features']:
