@@ -23,7 +23,7 @@ layerGenerator.run("nwr[shop=bicycle]({{bbox}});", "Fahrradgeschäft", "Bicycle 
 layerGenerator.merge_layers(geojson_destDir, ["bicyclemonitoringstation.geojson","bicyclerepairstation.geojson","bicycleshop.geojson"], "bicycleinfrastructure.geojson")
 
 layerGenerator.run("nwr[amenity=charging_station][bicycle=yes]({{bbox}});", "Fahrradladestation", "Bicycle charging station", "bikeChargeIcon", svgSourceDir+"bikecharge.svg")
-layerGenerator.run("nwr[amenity=charging_station][car=yes]({{bbox}});", "Elektroauto-Ladestation", "Car charging station", "carChargeIcon", svgSourceDir+"carcharge.svg")
+layerGenerator.run("""nwr[amenity=charging_station][~"^.*car$"~"yes"]({{bbox}});""", "Elektroauto-Ladestation", "Car charging station", "carChargeIcon", svgSourceDir+"carcharge.svg")
 layerGenerator.merge_layers(geojson_destDir, ["bicyclechargingstation.geojson","carchargingstation.geojson"], "charging.geojson")
 
 layerGenerator.run("""(nwr[amenity=parking]["parking"!~"underground|multi-storey"]["access"!~"customers|private|permissive"]({{bbox}});)->.parkings;nwr.parkings(if: (is_number(t["capacity"]) && t["capacity"]>10));""", "Parkplatz", "Car parking", "carParkOpIcon", svgSourceDir+"openedcarpark.svg")
